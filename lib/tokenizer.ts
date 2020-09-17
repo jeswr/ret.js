@@ -65,11 +65,31 @@ export const tokenizer = (regexpStr: string): Root => {
             last.push(sets.notWhitespace());
             break;
 
+          case 'p':
+            let value: string = '';
+            while ((c = str[i++]) !== '}') {
+              value += c;
+            }
+            i++
+            last.push({ type: types.UNICODE, value, not: false })
+
+          case 'P':
+
+
+          case 'k': // Named back reference
+            let value: string = '';
+            while ((c = str[i++]) !== '>') {
+              value += c;
+            }
+            i++
+            last.push({ type: types.REFERENCE, value, named: true });
+            break;
+
           default:
             // Check if c is integer.
             // In which case it's a reference.
             if (/\d/.test(c)) {
-              last.push({ type: types.REFERENCE, value: parseInt(c, 10) });
+              last.push({ type: types.REFERENCE, value: parseInt(c, 10), named: false });
 
             // Escaped character.
             } else {
@@ -144,6 +164,14 @@ export const tokenizer = (regexpStr: string): Root => {
           } else if (c === '!') {
             (group as Group).notFollowedBy = true;
 
+          } else if (c === '<') {
+            let name: string = '';
+            while ((c = str[i]) !== '>') {
+              name += c;
+              i++;
+            }
+            (group as Group).name = name;
+            i ++
           } else if (c !== ':') {
             util.error(regexpStr,
               `Invalid group, character '${c}'` +

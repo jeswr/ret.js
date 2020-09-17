@@ -17,6 +17,7 @@ export type Group = Base<types.GROUP, {
   followedBy?: boolean;
   notFollowedBy?: boolean;
   lookBehind?: boolean;
+  name?: string;
 }>
 
 export type Set = Base<types.SET, {
@@ -36,7 +37,7 @@ export type Repetition = Base<types.REPETITION, {
 }>
 
 export type Position  = ValueType<types.POSITION, '$' | '^' | 'b' | 'B'>
-export type Reference = ValueType<types.REFERENCE, number>
+export type Reference = ValueType<types.REFERENCE, number | string> & { named: boolean }
 export type Char      = ValueType<types.CHAR, number>
 
 export type Token =  Group | Position | Set | Range | Repetition | Reference | Char

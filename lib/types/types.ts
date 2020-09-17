@@ -6,5 +6,6 @@ export enum types {
   RANGE,
   REPETITION,
   REFERENCE,
-  CHAR
+  CHAR,
+  UNICODE
 }
